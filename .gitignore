@@ -4,3 +4,5 @@ node_modules
 /output
 *.log
 /.nyc_output
+.DS_Store
+package-lock.json
