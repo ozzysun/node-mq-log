@@ -1,3 +1,6 @@
 node_modules
+/conf
+/dist
+/output
 *.log
 /.nyc_output

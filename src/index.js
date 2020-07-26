@@ -1,4 +1,5 @@
-const { readYAML, getArgs } = require('./libs/utils')
+const { getArgs, createConfFolder } = require('./libs/utils')
+const { readYAML } = require('./libs/file')
 const { getChannelById, queueReceive } = require('./libs/mq-utils')
 const defaultSetting = require('./setting')
 const { appInit, appRun } = require('./app')
@@ -34,10 +35,12 @@ const mqInit = async({hostData, hostId, channelId, queue }) => {
   await queueReceive(channel, queueArray)
 }
 const run = async() => {
+  // 檢查並建立設定檔
+  await createConfFolder(defaultSetting)
   // 載入設定檔
   const configData = await loadConfig(defaultSetting)
   const args = getArgs()
-  appInit()
+  appInit(args)
   // 監聽mq
   const mqOpt = {
     hostData: configData.mqHost,
@@ -45,6 +48,7 @@ const run = async() => {
     channelId: args.channelId !== null ? args.channelId : configData.config.mq.channel,
     queue: args.queueId !== null ? args.queueId :configData.config.mq.queue
   }
+  console.log(mqOpt)
   await mqInit(mqOpt)
 }
 run()
