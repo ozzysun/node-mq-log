@@ -1,0 +1,21 @@
+{
+  "name": "mq-log",
+  "version": "1.0.0",
+  "description": "node mq log service",
+  "main": "src/index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+ssh://git@bitbucket.org/ozzysun/node-mq-log.git"
+  },
+  "author": "ozzysun",
+  "license": "ISC",
+  "homepage": "https://bitbucket.org/ozzysun/node-mq-log#readme",
+  "dependencies": {
+    "amqplib": "^0.6.0",
+    "js-yaml": "^3.14.0",
+    "yargs": "^15.4.1"
+  }
+}
