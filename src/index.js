@@ -40,7 +40,8 @@ const run = async() => {
   // 載入設定檔
   const configData = await loadConfig(defaultSetting)
   const args = getArgs()
-  appInit(args)
+  const port = args.port ? args.port : configData.config.port
+  appInit(port, configData.config)
   // 監聽mq
   const mqOpt = {
     hostData: configData.mqHost,
@@ -48,7 +49,8 @@ const run = async() => {
     channelId: args.channelId !== null ? args.channelId : configData.config.mq.channel,
     queue: args.queueId !== null ? args.queueId :configData.config.mq.queue
   }
-  console.log(mqOpt)
-  await mqInit(mqOpt)
+  if (args.enable === null || args.enable) {
+    if (configData.config.mq.enable) await mqInit(mqOpt)
+  }
 }
 run()

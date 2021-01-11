@@ -32,7 +32,9 @@ const queueReceive = async(channel, queueArray) => {
       let obj
       // 傳入非格式訊息 { data: , type:} 則以字串當作格式化
       if (contentStr.indexOf('"data"') !== -1) {
+        console.log('...is json')
         obj = JSON.parse(contentStr)
+        console.log(obj)
       } else {
         obj = {
           data: contentStr,

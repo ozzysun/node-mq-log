@@ -4,7 +4,16 @@ const getArgs = () => {
   const hostId = argv.host || argv.h || null
   const channelId = argv.cannel || argv.c || null
   const queueId = argv.queue || argv.q || null
-  const result = { hostId, channelId, queueId }
+  // 若同時設定 enable與disable則以 disable生效
+  let enable = null
+  if (argv.disable) {
+    enable = false
+  } else if (argv.enable) {
+    enable = true
+  }
+  // log api port
+  const port = argv.port || argv.p || null
+  const result = { hostId, channelId, queueId, port, enable }
   return result
 }
 // 產生預設的conf 目錄

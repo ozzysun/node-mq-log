@@ -6,11 +6,21 @@ module.exports = {
       id: 'config',
       path: path.resolve('./conf/index.yml'),
       default: {
-        ver: '0.0.1',
+        name: 'logserver',
+        version: '0.0.1',
+        port: 8899,
         mq: {
+          enable: false,
           host: 'rabbitLocal',
           channel: 'main',
           queue: 'mylog'
+        },
+        mongo: {
+          enable: true,
+          host: '127.0.0.1',
+          port: 27017,
+          user: 'root',
+          pwd: ''
         }
       }
     },
@@ -52,7 +62,7 @@ module.exports = {
     }
   ],
   dir: {
-    root: process.cwd(), // 整個project根目錄 /ozapi
-    bin: __dirname // 執行點的目錄 /ozpai/src 或 /ozapi/dist
+    root: process.cwd(), // 整個project根目錄 /node-mq-log
+    bin: __dirname // 執行點的目錄 /node-mq-log/src 或 /node-mq-log/dist
   }
 }
