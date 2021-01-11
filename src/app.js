@@ -13,8 +13,6 @@ const appInit = (config, port) => {
 const appRun = (content, msg) => {
   console.log('content ===')
   console.log(content)
-  // console.log('msg==')
-  // console.log(msg)
 }
 const getLogServer = (port, config) => {
   const app = express()
