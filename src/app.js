@@ -3,6 +3,7 @@ const express = require('express')
 const bodyParser = require('body-parser') // 用來接收 post req.body x-www-form-urlencoded
 const compress = require('compression')
 const cors = require('cors')
+const multer = require('multer') // 用來接收 post req.body form-data
 const { addMongoAPI } = require('./routes/mongoapi')
 // 啟動server { router, app, server }
 const appInit = (config, port) => {
@@ -28,6 +29,7 @@ const getLogServer = (port, config) => {
     limit: '10mb'
   }))
   app.use(bodyParser.raw())
+  app.use(multer({ dest: './uploads/' }).any()) // multer 更新後不能只用multer()
   app.use('/', router)
   if(config.mongo) addMongoAPI(app, config.mongo)
   const server = app.listen(port, () => {

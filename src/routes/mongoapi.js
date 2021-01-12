@@ -68,7 +68,7 @@ const addMongoAPI = (app, mongoConfig) => {
     res.json(findResult)
   })
   // 更新
-  app.put('mongo/:db/:collection', async(req, res) => {
+  app.put('/mongo/:db/:collection', async(req, res) => {
     const { db, collection } = req.params
     const { host, port, user, pwd } = mongoConfig
     const { filter, data } = req.body
@@ -80,14 +80,14 @@ const addMongoAPI = (app, mongoConfig) => {
     res.json(updateResult)
   })
   // 刪除
-  app.delete('mongo/:db/:collection', async(req, res) => {
+  app.delete('/mongo/:db/:collection', async(req, res) => {
     const { db, collection } = req.params
     const { host, port, user, pwd } = mongoConfig
     const { filter, options } = req.body
     // 建立連線 mongo client
     const opt = { host, port, db, user, pwd }
     const client = await getClient(opt)
-    // -- find --
+    // -- remove --
     const result = await mongoRemove({ client, db, collection, filter, options })
     res.json(result)
   })
