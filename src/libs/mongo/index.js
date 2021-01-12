@@ -73,7 +73,8 @@ const createByQueue = async(item) => {
       return await create(item)
     })
   }
-  await global.queue.createQ.add(item)
+  const result = await global.queue.createQ.add(item)
+  return result
 }
 const updateByQueue = async (item) => {
   if (!global.queue.updateQ) {
@@ -82,7 +83,8 @@ const updateByQueue = async (item) => {
       return await update(item)
     })
   }
-  await global.queue.updateQ.add(item)
+  const result = await global.queue.updateQ.add(item)
+  return result
 }
 const removeByQueue = async (item) => {
   if (!global.queue.removeQ) {
@@ -91,7 +93,8 @@ const removeByQueue = async (item) => {
       return await remove(item)
     })
   }
-  await global.queue.removeQ.add(item)
+  const result = await global.queue.removeQ.add(item)
+  return result
 }
 module.exports = {
   getClient,

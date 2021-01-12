@@ -13,6 +13,8 @@ const addMongoAPI = (app, mongoConfig) => {
     const client = await getClient(opt)
     // -- save --
     const saveResult = await mongoCreate({ client, db, collection, data })
+    console.log(`saveResult=`)
+    console.log(saveResult)
     if (saveResult.result.ok === 1) {
       res.send(`add success row length=${saveResult.result.n}`)
     } else {
