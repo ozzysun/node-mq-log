@@ -7,8 +7,13 @@ class Queue {
     this.isRunning = false
     this.pool = []
     this.result = {}
+    // 判斷是否idle 回收gc
+    this.isCheckIdle = false
+    this.flag1 = null
+    this.flag2 = null
   }
   async add(item) {
+    this.checkIdle()
     const id = `t_${new Date().getTime()}`
     this.pool.push({ item, id })
     if (!this.isRunning) await this.checkPool()
@@ -19,10 +24,12 @@ class Queue {
     if (this.pool.length > 0) {
       this.isRunning = true
       const queueItem = this.pool.shift()
+      this.flag1 = queueItem.id
       await this.run(queueItem)
       await this.checkPool()
     } else {
       this.isRunning = false
+      this.flag2 = this.flag1
       console.log(`queue[${this.name}] complete`)
     }
   }
@@ -42,7 +49,7 @@ class Queue {
         if (this.result[id]) {
           clearInterval(_id)
           resolve(this.result[id])
-          delete this.result[id]
+          // delete this.result[id]
         } else {
           if(index >= limit) {
             clearInterval(_id)
@@ -52,9 +59,26 @@ class Queue {
       }, 50)
     })
   }
-  clean() {
+  reset() {
+    console.log('reset gc..............')
     this.pool = []
     this.result = {}
+    this.flag1 = null
+    this.flag2 = null
+  }
+  checkIdle () {
+    if (!this.isCheckIdle) {
+      this.isCheckIdle = true
+      const checkId = setInterval(() => {
+        if (this.flag1 !== null && this.flag2 !== null) {
+          if (this.flag1 === this.flag2 ) {
+            this.isCheckIdle =false
+            this.reset()
+            clearInterval(checkId)
+          }
+        }
+      }, 10000)
+    }
   }
 }
 module.exports = Queue
