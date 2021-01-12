@@ -1,6 +1,7 @@
 /** 將mongo 工具包裝可更簡易使用的版本 以這裡功能對外使用 */
 const { parseSortStr, parseQueryStr } = require('./contentParser')
 const { getClient, create, remove, query, update } = require('./mongo-base')
+const Queue = require(`../Queue`)
 // 統計數量
 const count = async({ client, db, collection, queryStr, limit, autoClose = true }) => {
   const dbase = client.db(db)
@@ -64,5 +65,40 @@ const pageQuery = async({ client, db, collection, queryStr, fields = [], sortStr
   meta.prev = `${baseUrl}&currentPage=${prev}&countPerPage=${countPerPage}`
   return { meta, data: queryResult.data }
 }
-// const ozquery =
-module.exports = { getClient, create, remove, query: simpleQuery, update, count, pageQuery }
+// create update and delete use queue
+const createByQueue = async(item) => {
+  if (!global.queue.createQ) {
+    global.queue.createQ = new Queue('createQ', async(item) => {
+      // 寫入mongo
+      return await create(item)
+    })
+  }
+  await global.queue.createQ.add(item)
+}
+const updateByQueue = async (item) => {
+  if (!global.queue.updateQ) {
+    global.queue.updateQ = new Queue('updateQ', async(item) => {
+      // 寫入mongo
+      return await update(item)
+    })
+  }
+  await global.queue.updateQ.add(item)
+}
+const removeByQueue = async (item) => {
+  if (!global.queue.removeQ) {
+    global.queue.removeQ = new Queue('removeQ', async(item) => {
+      // 寫入mongo
+      return await remove(item)
+    })
+  }
+  await global.queue.removeQ.add(item)
+}
+module.exports = {
+  getClient,
+  count,
+  pageQuery,
+  query: simpleQuery,
+  create: createByQueue,
+  update: updateByQueue,
+  remove: removeByQueue
+}

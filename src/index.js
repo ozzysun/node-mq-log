@@ -3,6 +3,7 @@ const { readYAML } = require('./libs/file')
 const { getChannelById, queueReceive } = require('./libs/mq-utils')
 const defaultSetting = require('./setting')
 const { appInit, appRun } = require('./app')
+global.queue = {} // 儲存共用的queue物件
 // 載入外部conf下的config檔案
 const loadConfig = async(setting = null) => {
   if (setting === null) setting = defaultSetting
